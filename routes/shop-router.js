@@ -11,6 +11,7 @@ router.get('/products', shopController.getProducts)
 //vd : /products/:delete sau /products/:productId thi k bao h call vao dc delete
 router.get('/products/:productId',shopController.getProduct)
 router.get('/cart', shopController.getCart)
+router.post('/cart', shopController.postCarts)
 router.get('/orders', shopController.getOrders)
 router.get('/checkout', shopController.getCheckOut)
 

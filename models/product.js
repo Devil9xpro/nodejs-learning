@@ -1,9 +1,6 @@
 const products = []
 const path = require('path')
 const fs = require('fs')
-const {
-    getProducts
-} = require('../controllers/admin-controller')
 const p = path.join(path.dirname(process.mainModule.filename), 'data', 'product.json')
 
 const getProductsFromFile = cb => {
