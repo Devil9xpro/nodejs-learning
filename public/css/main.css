@@ -10,10 +10,6 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-.centered {
-  text-align: center;
-}
-
 main {
   padding: 1rem;
   margin: auto;
@@ -21,6 +17,10 @@ main {
 
 form {
   display: inline;
+}
+
+.centered {
+  text-align: center;
 }
 
 .main-header {
