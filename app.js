@@ -7,6 +7,8 @@ const errorController = require('./controllers/error-controller');
 const sequelize = require('./util/database')
 const Product = require('./models/product')
 const User = require('./models/user')
+const Cart = require('./models/cart')
+const CartItem = require('./models/cart-items')
 
 const app = express();
 
@@ -41,6 +43,14 @@ Product.belongsTo(User, {
     onDelete: 'CASCADE'
 })
 User.hasMany(Product)
+User.hasOne(Cart)
+Cart.belongsTo(User)
+Cart.belongsToMany(Product, {
+    through: CartItem
+})
+Product.belongsToMany(Cart, {
+    through: CartItem
+})
 //sync : create table in database
 sequelize
     // .sync({
@@ -60,7 +70,9 @@ sequelize
         return user
     })
     .then(user => {
-        console.log(user)
+        return user.createCart()
+    })
+    .then(cart => {
         app.listen(3000)
     })
     .catch(err => console.log(err))
