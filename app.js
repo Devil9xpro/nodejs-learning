@@ -12,7 +12,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin-router');
-// const shopRoutes = require('./routes/shop-router');
+const shopRoutes = require('./routes/shop-router');
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/admin', adminRoutes);
-// app.use(shopRoutes);
+app.use(shopRoutes);
 
 app.use(errorController.get404);
 
