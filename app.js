@@ -3,17 +3,26 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
+const session = require('express-session')
+const MongoDbStore = require('connect-mongodb-session')(session)
 
 const errorController = require('./controllers/error-controller');
 const User = require('./models/user');
 
+const MongoDB_URI = 'mongodb://localhost:27017/shop'
+
 const app = express();
+const store = new MongoDbStore({
+    uri: MongoDB_URI,
+    collection: 'session'
+})
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin-router');
 const shopRoutes = require('./routes/shop-router');
+const authRoutes = require('./routes/auth-router');
 
 app.use((req, res, next) => {
     User.findById('60fd30bacf328237e4c0b2e7')
@@ -28,16 +37,18 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({secret: 'my secret', resave: false, saveUninitialized: false, cookie: {}, store: store}))
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 app.use(errorController.get404);
 
-mongoose.connect('mongodb://localhost:27017/shop')
+mongoose.connect(MongoDB_URI)
     .then(result => {
         User.findOne().then(user => {
-            if(!user) {
+            if (!user) {
                 const user = new User({
                     name: 'DavidNguyen',
                     email: 'chinh@test.com',
