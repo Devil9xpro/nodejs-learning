@@ -8,7 +8,7 @@ exports.getProducts = (req, res, next) => {
                 prods: products,
                 pageTitle: 'All Products',
                 path: '/products',
-                isAuthenticated: req.isLoggendIn
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => {
@@ -24,7 +24,7 @@ exports.getProduct = (req, res, next) => {
                 product: product,
                 pageTitle: product.title,
                 path: '/products',
-                isAuthenticated: req.isLoggendIn
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));
@@ -37,7 +37,7 @@ exports.getIndex = (req, res, next) => {
                 prods: products,
                 pageTitle: 'Shop',
                 path: '/',
-                isAuthenticated: req.isLoggendIn
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => {
@@ -50,18 +50,16 @@ exports.getCart = (req, res, next) => {
         .populate('cart.items.productId')
         .execPopulate()
         .then(user => {
-            console.log(user.cart.items)
-            const products = user.cart.items
+            const products = user.cart.items;
             res.render('shop/cart', {
                 path: '/cart',
                 pageTitle: 'Your Cart',
                 products: products,
-                isAuthenticated: req.isLoggendIn
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));
 };
-
 exports.postCart = (req, res, next) => {
     const prodId = req.body.productId;
     Product.findById(prodId)
@@ -118,7 +116,7 @@ exports.getOrders = (req, res, next) => {
                 path: '/orders',
                 pageTitle: 'Your Orders',
                 orders: orders,
-                isAuthenticated: req.isLoggendIn
+                isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(err => console.log(err));
